@@ -1,0 +1,88 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int size = GetValidSize();
+        int[,] array = new int[size, size];
+
+        FillArray(array);
+
+        PrintArray(array);
+    }
+
+    static int GetValidSize()
+    {
+        int size;
+        bool isValidSize = false;
+
+        do
+        {
+            Console.Write("Podaj rozmiar tablicy (liczba całkowita dodatnia): ");
+            string input = Console.ReadLine();
+
+            if (int.TryParse(input, out size) && size > 0)
+            {
+                isValidSize = true;
+            }
+            else
+            {
+                Console.WriteLine("Niepoprawny rozmiar tablicy. Podaj liczbę całkowitą dodatnią.");
+            }
+        } while (!isValidSize);
+
+        return size;
+    }
+
+    static void FillArray(int[,] array)
+    {
+        int value = 1;
+        int rows = array.GetLength(0);
+        int columns = array.GetLength(1);
+        int currentRow = 0;
+        int currentColumn = 0;
+
+        while (value <= rows * columns)
+        {
+            for (int i = currentColumn; i < columns - currentColumn; i++)
+            {
+                array[currentRow, i] = value;
+                value++;
+            }
+
+            for (int i = currentRow + 1; i < rows - currentRow; i++)
+            {
+                array[i, columns - currentColumn - 1] = value;
+                value++;
+            }
+
+            for (int i = columns - currentColumn - 2; i >= currentColumn; i--)
+            {
+                array[rows - currentRow - 1, i] = value;
+                value++;
+            }
+
+            for (int i = rows - currentRow - 2; i > currentRow; i--)
+            {
+                array[i, currentColumn] = value;
+                value++;
+            }
+
+            currentRow++;
+            currentColumn++;
+        }
+    }
+
+    static void PrintArray(int[,] array)
+    {
+        for (int i = 0; i < array.GetLength(0); i++)
+        {
+            for (int j = 0; j < array.GetLength(1); j++)
+            {
+                Console.Write(array[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+}
